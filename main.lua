@@ -39,6 +39,7 @@ function love.load()
     KL.down = "down"
     KL.right = "right"
     KL.left = "left"
+    KL.x = "interact"
 
 
     love.keypressed = function(k)
@@ -52,19 +53,29 @@ end
 
 
 function love.update(dt)
-
-    if KD.down then
-        Player:walk('front', dt)
-    elseif KD.up then
-        Player:walk('back', dt)
-    elseif KD.right then
-        Player:walk('right', dt)
-    elseif KD.left then
-        Player:walk('left', dt)
-    else
-        Player:standstill()
+    if Player.state.id == 'movement' then
+        if KD.down then
+            Player:walk('front', dt)
+        elseif KD.up then
+            Player:walk('back', dt)
+        elseif KD.right then
+            Player:walk('right', dt)
+        elseif KD.left then
+            Player:walk('left', dt)
+        elseif KD.interact then
+            Player.state = Player.states.interacting()
+        else
+            Player:standstill()
+        end
+    elseif Player.state.id == 'interacting' then
+        Player.current_animation = Player.animations[Player.facing..'_interacting']
+        if Player.state.duration_left <= 0 then
+            Player.state = Player.states.movement()
+        else
+            Player.state.duration_left = Player.state.duration_left - dt
+        end
     end
-
+    
     Player.current_animation:update(dt)
     
 end
