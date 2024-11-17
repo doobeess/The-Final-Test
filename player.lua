@@ -9,6 +9,12 @@ function init_player()
     Player = {
         x = 20,
         y = 20,
+        hitbox = function (x, y) return {
+            x = x+1,
+            y = y+1,
+            width = 6,
+            height = 11
+        } end,
         liminal_x = 20,
         liminal_y = 20,
         speed = 60,
@@ -57,7 +63,8 @@ function init_player()
 
         self.x, self.liminal_x = check_liminality(self.x, self.liminal_x)
         self.y, self.liminal_y = check_liminality(self.y, self.liminal_y)
-        print(self.x.." "..self.liminal_x)
+        
+        local hitbox = self.hitbox(self.x, self.y)
 
         self.facing = direction
     end

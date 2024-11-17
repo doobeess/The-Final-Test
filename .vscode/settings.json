@@ -1,6 +1,7 @@
 {
     "Lua.diagnostics.globals": [
         "love",
-        "init_player"
+        "init_player",
+        "overlaps"
     ]
 }
