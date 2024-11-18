@@ -1,3 +1,5 @@
+collision = require('collision')
+
 INTERACTION_DURATION = 1
 
 function init_player()
@@ -7,8 +9,8 @@ function init_player()
 
     -- Player object
     Player = {
-        x = 20,
-        y = 20,
+        x = 100,
+        y = 100,
         hitbox = function (x, y) return {
             x = x+1,
             y = y+1,
@@ -61,10 +63,20 @@ function init_player()
         self.liminal_x = self.liminal_x + (Directions[direction][1] * self.speed * dt)
         self.liminal_y = self.liminal_y + (Directions[direction][2] * self.speed * dt)
 
-        self.x, self.liminal_x = check_liminality(self.x, self.liminal_x)
-        self.y, self.liminal_y = check_liminality(self.y, self.liminal_y)
+        local x, liminal_x = check_liminality(self.x, self.liminal_x)
+        local y, liminal_y = check_liminality(self.y, self.liminal_y)
         
-        local hitbox = self.hitbox(self.x, self.y)
+        local hitbox = self.hitbox(x, y)
+
+        if check_tilemap_collision(hitbox) then 
+            self.liminal_x = self.x
+            self.liminal_y = self.y
+        else
+            self.x = x
+            self.y = y
+            self.liminal_x = liminal_x
+            self.liminal_y = liminal_y
+        end
 
         self.facing = direction
     end

@@ -6,9 +6,9 @@ Player = require('player')
 
 
 function check_liminality(v, liminal_v) 
-    if math.abs(liminal_v) > v then
+    if math.floor(liminal_v) > v then
         v = v + 1
-    elseif math.abs(liminal_v)+1 < v or liminal_v == v-1 then
+    elseif math.floor(liminal_v)+1 < v or liminal_v == v-1 then
         v = v - 1
     end
     return v, liminal_v
@@ -23,12 +23,12 @@ function love.load()
     -- Fix pixel art
     love.graphics.setDefaultFilter("nearest", "nearest")
 
-    PIXELS_WIDTH = 200
-    PIXELS_HEIGHT = 200
+    SCREEN_WIDTH = 200
+    SCREEN_HEIGHT = 200
     PIXEL_SIZE = 2
 
     -- Window width/height
-    love.window.setMode(PIXELS_WIDTH*PIXEL_SIZE, PIXELS_HEIGHT*PIXEL_SIZE)
+    love.window.setMode(SCREEN_WIDTH*PIXEL_SIZE, SCREEN_HEIGHT*PIXEL_SIZE)
 
     init_player()
 
@@ -49,6 +49,16 @@ function love.load()
     love.keyreleased= function(k)
         if KL[k] then KD[KL[k]] = nil end
     end
+
+    -- Will be deleted, used for testing
+    Room = {
+        {1,1,1,1,1},
+        {1,0,0,1,1},
+        {1,0,0,0,1},
+        {1,0,0,0,1},
+        {1,1,1,1,1}
+    }
+    Tile_Size = 40
 end
 
 
@@ -84,6 +94,16 @@ end
 function love.draw()
     local font = love.graphics.newFont("pixeloid-font/PixeloidSans.ttf", 16)
     love.graphics.setFont(font)
+    local rendered_tile_size = Tile_Size * PIXEL_SIZE
 
-    Player.current_animation:draw(Player_SS, Player.x*PIXEL_SIZE, Player.y*PIXEL_SIZE, 0, 4, 4)
+    love.graphics.setColor(43, 43, 43)
+    for y, row in pairs(Room) do 
+        for x, cell in pairs(row) do
+            if cell == 1 then 
+                love.graphics.rectangle('fill',(x-1)*rendered_tile_size,(y-1)*rendered_tile_size,rendered_tile_size,rendered_tile_size)
+            end
+        end
+    end
+
+    Player.current_animation:draw(Player_SS, Player.x*PIXEL_SIZE, Player.y*PIXEL_SIZE, 0, PIXEL_SIZE, PIXEL_SIZE)
 end

@@ -2,6 +2,10 @@
     "Lua.diagnostics.globals": [
         "love",
         "init_player",
-        "overlaps"
+        "overlaps",
+        "hitbox",
+        "check_tilemap_collision",
+        "collision",
+        "slice"
     ]
 }
