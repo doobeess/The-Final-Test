@@ -14,8 +14,8 @@ function init_player()
         hitbox = function (x, y) return {
             x = x+1,
             y = y+1,
-            width = 6,
-            height = 11
+            width = 5,
+            height = 10
         } end,
         liminal_x = 20,
         liminal_y = 20,
